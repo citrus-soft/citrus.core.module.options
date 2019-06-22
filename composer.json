@@ -5,6 +5,7 @@
   "license": "proprietary",
   "minimum-stability": "stable",
   "keywords": ["bitrix"],
+  "version": "0.1",
   "require": {
     "php": ">=5.6"
   },
