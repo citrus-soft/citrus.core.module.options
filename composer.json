@@ -15,7 +15,7 @@
     },
     "files": [
       "src/ModuleOptions/functions.php",
-      "src/ModuleOptions/aliases.php",
+      "src/ModuleOptions/aliases.php"
     ]
   },
   "config": {
