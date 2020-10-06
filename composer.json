@@ -13,8 +13,8 @@
       "Citrus\\Core\\": "src/"
     },
     "files": [
-      "src/ModuleOptions/functions.php",
-      "src/ModuleOptions/aliases.php"
+      "ModuleOptions/functions.php",
+      "ModuleOptions/aliases.php"
     ]
   },
   "config": {
