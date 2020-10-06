@@ -9,9 +9,9 @@
     "php": ">=5.6"
   },
   "autoload": {
-    "psr-4": {
-      "Citrus\\Core\\": "src/"
-    },
+    "classmap": [
+    	"src"
+    ],
     "files": [
       "ModuleOptions/functions.php",
       "ModuleOptions/aliases.php"
