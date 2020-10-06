@@ -12,7 +12,11 @@
   "autoload": {
     "psr-4": {
       "Citrus\\Core\\": "src/"
-    }
+    },
+    "files": [
+      "src/ModuleOptions/functions.php",
+      "src/ModuleOptions/aliases.php",
+    ]
   },
   "config": {
     "preferred-install": {
