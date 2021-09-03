@@ -14,3 +14,5 @@ class_alias(PasswordOption::class, Password::class);
 class_alias(SelectboxMultiOption::class, SelectboxMulti::class);
 class_alias(SelectboxOption::class, Selectbox::class);
 class_alias(TextAreaOption::class, Textarea::class);
+class_alias(IblockPropertiesOption::class, IblockProperties::class);
+class_alias(BusinessValueOption::class, BusinessValue::class);
