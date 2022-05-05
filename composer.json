@@ -9,12 +9,13 @@
     "php": ">=5.6"
   },
   "autoload": {
-    "classmap": [
-    	"/"
-    ],
+    "autoload": {
+      "psr-4": {
+        "Citrus\\Core\\ModuleOptions\\": "src/ModuleOptions/"
+      }
+    },
     "files": [
-      "ModuleOptions/functions.php",
-      "ModuleOptions/aliases.php"
+      "ModuleOptions/functions.php"
     ]
   },
   "config": {
