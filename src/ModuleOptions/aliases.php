@@ -2,8 +2,6 @@
 
 namespace Citrus\Core\ModuleOptions;
 
-if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-
 class_alias(CheckboxOption::class, Checkbox::class);
 class_alias(NoteOption::class, Note::class);
 class_alias(OptionControl::class, Control::class);
