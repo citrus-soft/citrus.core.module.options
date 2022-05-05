@@ -1,5 +1,5 @@
 {
-  "name": "citrus/core-module-options",
+  "name": "citrus-soft/core-module-options",
   "description": "Bitrix. Admin option form module",
   "type": "library",
   "license": "proprietary",
@@ -9,14 +9,9 @@
     "php": ">=5.6"
   },
   "autoload": {
-    "autoload": {
-      "psr-4": {
-        "Citrus\\Core\\ModuleOptions\\": "src/ModuleOptions/"
-      }
-    },
-    "files": [
-      "ModuleOptions/functions.php"
-    ]
+    "psr-4": {
+      "Citrus\\Core\\ModuleOptions\\": "src/ModuleOptions/"
+    }
   },
   "config": {
     "preferred-install": {
