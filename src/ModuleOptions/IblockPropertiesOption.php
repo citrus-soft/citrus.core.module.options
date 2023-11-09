@@ -63,6 +63,9 @@ class IblockPropertiesOption extends StaticHtml
 	/** @var bool Использовать ли список свойств элемента инфоблока */
 	private $useElementProperties = false;
 
+	/** @var bool Использовать ли CODE вместо ID при выобре свойства */
+	private $useElementPropertyCode = false;
+
 	/** @var bool Использовать ли список полей раздела инфоблока */
 	private $useSectionFields = true;
 
@@ -150,6 +153,33 @@ class IblockPropertiesOption extends StaticHtml
 	public function isUseElementProperties(): bool
 	{
 		return $this->useElementProperties;
+	}
+
+	/**
+	 * Использовать ли CODE вместо ID при выобре свойства
+	 *
+	 * @param bool $useElementPropertyCode
+	 * @return $this
+	 */
+	public function setUseElementPropertyCode(bool $useElementPropertyCode): IblockPropertiesOption
+	{
+		$this->useElementPropertyCode = $useElementPropertyCode;
+
+		return $this;
+	}
+
+	/**
+	 * Возвращает, Использовать ли CODE вместо ID при выобре свойства
+	 *
+	 * @return bool
+	 */
+	public function isUseElementPropertyCode(): bool
+	{
+		return $this->useElementPropertyCode;
+	}
+
+	public function getElementPropertyCode() {
+		return $this->isUseElementPropertyCode() ? "CODE" : "ID";
 	}
 
 	/**
@@ -336,43 +366,43 @@ class IblockPropertiesOption extends StaticHtml
 		}
 
 		?><script>
-			/** Ключ настройки Выберите инфоблок */
-			let IBlockSettingsKey = "<?= $this->getNameIBlock()?>",
-				/** Ключ настройки Поле элемента */
-				iBlockElementSettingsKey = "<?= $this->getNameElement()?>",
-				/** Ключ настройки Поле раздела */
-				IBlockSectionSettingsKey = "<?= $this->getNameSection()?>",
-				/** Поле Выберите инфоблок */
-				IBlockSettingsOb = $("select[name=" + IBlockSettingsKey + "]"),
+		/** Ключ настройки Выберите инфоблок */
+		let IBlockSettingsKey = "<?= $this->getNameIBlock()?>",
+			/** Ключ настройки Поле элемента */
+			iBlockElementSettingsKey = "<?= $this->getNameElement()?>",
+			/** Ключ настройки Поле раздела */
+			IBlockSectionSettingsKey = "<?= $this->getNameSection()?>",
+			/** Поле Выберите инфоблок */
+			IBlockSettingsOb = $("select[name=" + IBlockSettingsKey + "]"),
 
-				/** Фильтровать список полей элемента и раздела по выбранному инфоблоку */
-				IBlockSettingsChanged = function (iBlockId) {
-					let elementField = $("select[name=" + iBlockElementSettingsKey + "]"),
-						sectionField = $("select[name=" + IBlockSectionSettingsKey + "]");
+			/** Фильтровать список полей элемента и раздела по выбранному инфоблоку */
+			IBlockSettingsChanged = function (iBlockId) {
+				let elementField = $("select[name=" + iBlockElementSettingsKey + "]"),
+					sectionField = $("select[name=" + IBlockSectionSettingsKey + "]");
 
-					elementField.children("option[value*=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>]").hide();
-					if (iBlockId) {
-						elementField.children("option[value^=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>" + iBlockId + "]").show();
-					}
+				elementField.children("option[value*=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>]").hide();
+				if (iBlockId) {
+					elementField.children("option[value^=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>" + iBlockId + "]").show();
+				}
 
-					sectionField.children("option[value*=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>]").hide();
-					if (iBlockId) {
-						sectionField.children("option[value^=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>" + iBlockId + "]").show();
-					}
-				};
+				sectionField.children("option[value*=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>]").hide();
+				if (iBlockId) {
+					sectionField.children("option[value^=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>" + iBlockId + "]").show();
+				}
+			};
 
-			/**
-			 * При изменении выбранного инфоблока фильтровать список полей элемента и раздела по выбранному инфоблоку
-			 */
-			IBlockSettingsOb.on("change", function () {
-				IBlockSettingsChanged($(this).val());
-			});
+		/**
+		 * При изменении выбранного инфоблока фильтровать список полей элемента и раздела по выбранному инфоблоку
+		 */
+		IBlockSettingsOb.on("change", function () {
+			IBlockSettingsChanged($(this).val());
+		});
 
-			/**
-			 * При загрузке для выбранного инфоблока фильтровать список полей элемента и раздела
-			 */
-			IBlockSettingsChanged(IBlockSettingsOb.val());
-		</script><?
+		/**
+		 * При загрузке для выбранного инфоблока фильтровать список полей элемента и раздела
+		 */
+		IBlockSettingsChanged(IBlockSettingsOb.val());
+	</script><?
 	}
 
 	/**
@@ -601,16 +631,17 @@ class IblockPropertiesOption extends StaticHtml
 			return [];
 
 
+		$elementPropertyField = $this->getElementPropertyCode();
 		try {
 			$propertyIterator = PropertyTable::getList(
 				[
-					"select" => ["ID", "IBLOCK_ID", "NAME"],
+					"select" => [$elementPropertyField, "IBLOCK_ID", "NAME"],
 					"filter" => ["=IBLOCK_ID" => $IBlocks],
 					"order" => ["IBLOCK_ID" => "ASC", "ID" => "ASC"]
 				]
 			);
 			while ($property = $propertyIterator->fetch()) {
-				$elementProps[static::IBLOCK_ELEMENT_PROPERTY_PREFIX . $property["IBLOCK_ID"] . "_" . $property["ID"]] = "[" . $property["ID"] . "] " . $property["NAME"];
+				$elementProps[static::IBLOCK_ELEMENT_PROPERTY_PREFIX . $property["IBLOCK_ID"] . "_" . $property[$elementPropertyField]] = "[" . $property[$elementPropertyField] . "] " . $property["NAME"];
 			}
 		}
 		catch (Exception $ex) {
