@@ -366,43 +366,49 @@ class IblockPropertiesOption extends StaticHtml
 		}
 
 		?><script>
-		/** Ключ настройки Выберите инфоблок */
-		let IBlockSettingsKey = "<?= $this->getNameIBlock()?>",
-			/** Ключ настройки Поле элемента */
-			iBlockElementSettingsKey = "<?= $this->getNameElement()?>",
-			/** Ключ настройки Поле раздела */
-			IBlockSectionSettingsKey = "<?= $this->getNameSection()?>",
-			/** Поле Выберите инфоблок */
-			IBlockSettingsOb = $("select[name=" + IBlockSettingsKey + "]"),
+			function init<?= $this->getNameIBlock()?>() {
 
-			/** Фильтровать список полей элемента и раздела по выбранному инфоблоку */
-			IBlockSettingsChanged = function (iBlockId) {
-				let elementField = $("select[name=" + iBlockElementSettingsKey + "]"),
-					sectionField = $("select[name=" + IBlockSectionSettingsKey + "]");
+				/** Ключ настройки Выберите инфоблок */
+				let IBlockSettingsKey = "<?= $this->getNameIBlock()?>",
+					/** Ключ настройки Поле элемента */
+					iBlockElementSettingsKey = "<?= $this->getNameElement()?>",
+					/** Ключ настройки Поле раздела */
+					IBlockSectionSettingsKey = "<?= $this->getNameSection()?>",
+					/** Поле Выберите инфоблок */
+					IBlockSettingsOb = $("select[name=" + IBlockSettingsKey + "]"),
 
-				elementField.children("option[value*=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>]").hide();
-				if (iBlockId) {
-					elementField.children("option[value^=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>" + iBlockId + "]").show();
-				}
+					/** Фильтровать список полей элемента и раздела по выбранному инфоблоку */
+					IBlockSettingsChanged = function (iBlockId) {
+						let elementField = $("select[name=" + iBlockElementSettingsKey + "]"),
+							sectionField = $("select[name=" + IBlockSectionSettingsKey + "]");
 
-				sectionField.children("option[value*=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>]").hide();
-				if (iBlockId) {
-					sectionField.children("option[value^=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>" + iBlockId + "]").show();
-				}
-			};
+						elementField.children("option[value*=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>]").hide();
+						if (iBlockId) {
+							elementField.children("option[value^=<?=static::IBLOCK_ELEMENT_PROPERTY_PREFIX?>" + iBlockId + "]").show();
+						}
 
-		/**
-		 * При изменении выбранного инфоблока фильтровать список полей элемента и раздела по выбранному инфоблоку
-		 */
-		IBlockSettingsOb.on("change", function () {
-			IBlockSettingsChanged($(this).val());
-		});
+						sectionField.children("option[value*=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>]").hide();
+						if (iBlockId) {
+							sectionField.children("option[value^=<?=static::IBLOCK_SECTION_PROPERTY_PREFIX?>" + iBlockId + "]").show();
+						}
+					};
 
-		/**
-		 * При загрузке для выбранного инфоблока фильтровать список полей элемента и раздела
-		 */
-		IBlockSettingsChanged(IBlockSettingsOb.val());
-	</script><?
+				/**
+				 * При изменении выбранного инфоблока фильтровать список полей элемента и раздела по выбранному инфоблоку
+				 */
+				IBlockSettingsOb.on("change", function () {
+					IBlockSettingsChanged($(this).val());
+				});
+
+				/**
+				 * При загрузке для выбранного инфоблока фильтровать список полей элемента и раздела
+				 */
+				IBlockSettingsChanged(IBlockSettingsOb.val());
+			}
+
+			init<?= $this->getNameIBlock()?>();
+		</script>
+		<?
 	}
 
 	/**
@@ -501,6 +507,8 @@ class IblockPropertiesOption extends StaticHtml
 	protected function loadData(): void
 	{
 		$iblocks = $this->loadIblocks();
+
+		$this->setOptions([]);
 
 		$this->addOption([
 			$this->getNameIblock(),
